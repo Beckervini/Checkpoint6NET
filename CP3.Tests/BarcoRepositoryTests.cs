@@ -25,7 +25,7 @@ namespace CP3.Tests
         [Fact]
         public void Add_ShouldAddBarco()
         {
-            var barco = new BarcoEntity { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
+            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
 
             _barcoRepository.Add(barco);
             var result = _context.Barcos.FirstOrDefault(b => b.Id == 1);
@@ -37,7 +37,7 @@ namespace CP3.Tests
         [Fact]
         public void GetById_ShouldReturnBarco()
         {
-            var barco = new BarcoEntity { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
+            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
             _context.Barcos.Add(barco);
             _context.SaveChanges();
 
@@ -50,7 +50,7 @@ namespace CP3.Tests
         [Fact]
         public void Delete_ShouldRemoveBarco()
         {
-            var barco = new BarcoEntity { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
+            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
             _context.Barcos.Add(barco);
             _context.SaveChanges();
 
@@ -63,8 +63,8 @@ namespace CP3.Tests
         [Fact]
         public void GetAll_ShouldReturnAllBarcos()
         {
-            _context.Barcos.Add(new BarcoEntity { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 });
-            _context.Barcos.Add(new BarcoEntity { Id = 2, Nome = "Barco B", Modelo = "Modelo B", Ano = 2021, Tamanho = 20.0 });
+            _context.Barcos.Add(new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 });
+            _context.Barcos.Add(new Barco { Id = 2, Nome = "Barco B", Modelo = "Modelo B", Ano = 2021, Tamanho = 20.0 });
             _context.SaveChanges();
 
             var result = _barcoRepository.GetAll();
