@@ -1,76 +1,66 @@
-﻿using CP3.Data.AppData;
-using CP3.Data.Repositories;
+using CP3.Application.Services;
 using CP3.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using CP3.Domain.Interfaces;
+using Moq;
 using Xunit;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace CP3.Tests
 {
-    public class BarcoRepositoryTests
+    public class BarcoApplicationServiceTests
     {
-        private readonly DbContextOptions<ApplicationContext> _options;
-        private readonly ApplicationContext _context;
-        private readonly BarcoRepository _barcoRepository;
+        private readonly Mock<IBarcoRepository> _repositoryMock;
+        private readonly BarcoApplicationService _barcoService;
 
-        public BarcoRepositoryTests()
+        public BarcoApplicationServiceTests()
         {
-            _options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase(databaseName: "TestDB")
-                .Options;
-            _context = new ApplicationContext(_options);
-            _barcoRepository = new BarcoRepository(_context);
+            _repositoryMock = new Mock<IBarcoRepository>();
+            _barcoService = new BarcoApplicationService(_repositoryMock.Object);
         }
 
         [Fact]
-        public void Add_ShouldAddBarco()
+        public void AddBarco_ShouldCallRepositoryAdd()
         {
             var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
 
-            _barcoRepository.Add(barco);
-            var result = _context.Barcos.FirstOrDefault(b => b.Id == 1);
+            _barcoService.AddBarco(barco);
+
+            _repositoryMock.Verify(r => r.Add(It.Is<Barco>(b => b.Nome == barco.Nome && b.Modelo == barco.Modelo)), Times.Once);
+        }
+
+        [Fact]
+        public void GetBarcoById_ShouldReturnBarco()
+        {
+            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
+            _repositoryMock.Setup(r => r.GetById(1)).Returns(barco);
+
+            var result = _barcoService.GetBarcoById(1);
 
             Assert.NotNull(result);
             Assert.Equal("Barco A", result.Nome);
         }
 
         [Fact]
-        public void GetById_ShouldReturnBarco()
+        public void DeleteBarco_ShouldCallRepositoryDelete()
         {
-            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
-            _context.Barcos.Add(barco);
-            _context.SaveChanges();
-
-            var result = _barcoRepository.GetById(1);
-
-            Assert.NotNull(result);
-            Assert.Equal(1, result.Id);
+            _barcoService.DeleteBarco(1);
+            _repositoryMock.Verify(r => r.Delete(1), Times.Once);
         }
 
         [Fact]
-        public void Delete_ShouldRemoveBarco()
+        public void GetAllBarcos_ShouldReturnListOfBarcos()
         {
-            var barco = new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 };
-            _context.Barcos.Add(barco);
-            _context.SaveChanges();
+            var barcos = new List<Barco>
+            {
+                new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 },
+                new Barco { Id = 2, Nome = "Barco B", Modelo = "Modelo B", Ano = 2021, Tamanho = 20.0 }
+            };
+            _repositoryMock.Setup(r => r.GetAll()).Returns(barcos);
 
-            _barcoRepository.Delete(1);
-            var result = _context.Barcos.FirstOrDefault(b => b.Id == 1);
-
-            Assert.Null(result);
-        }
-
-        [Fact]
-        public void GetAll_ShouldReturnAllBarcos()
-        {
-            _context.Barcos.Add(new Barco { Id = 1, Nome = "Barco A", Modelo = "Modelo A", Ano = 2020, Tamanho = 15.5 });
-            _context.Barcos.Add(new Barco { Id = 2, Nome = "Barco B", Modelo = "Modelo B", Ano = 2021, Tamanho = 20.0 });
-            _context.SaveChanges();
-
-            var result = _barcoRepository.GetAll();
+            var result = _barcoService.GetAllBarcos();
 
             Assert.NotEmpty(result);
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.Count);
         }
     }
 }
