@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "mt3JNlyLOL7QWq5zpD/EIPLYVytVOVfzHNfy4IxS1+2YaR8DWvD2pjocU2AJKVlOUdubXY+m2sQq3lSAP4lbjw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Desktop\\Desktop\\.........AAAAAAcp3NET\\checkpoint03-master\\CP3.Application\\CP3.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Desktop\\.nuget\\packages\\fluentvalidation\\11.10.0\\fluentvalidation.11.10.0.nupkg.sha512"
+  ],
+  "logs": []
+}
