@@ -4,8 +4,6 @@ API desenvolvida em .NET 8, focada no gerenciamento de barcos. O projeto demonst
 Sobre o projeto
 O Checkpoint6NET oferece endpoints para cadastrar, listar, editar e excluir barcos. Utiliza a separação entre camada de apresentação (API), aplicação (Application) e objetos de transferência de dados (DTOs), tornando o projeto organizado e didático.
 
-Ideal para estudos de arquitetura limpa e desenvolvimento de APIs com .NET.
-
 Funcionalidades
 Cadastro de barcos
 
